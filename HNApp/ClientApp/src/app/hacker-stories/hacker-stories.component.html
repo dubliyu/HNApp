@@ -1,1 +1,16 @@
-<p>hacker-stories works!</p>
+<div class="story_body">
+  <a class="story_card" *ngFor="let story of stories" href="{{story.url}}" target="_blank">
+    <div class="story_ctn">
+      <div class="story_card_top">
+        <h1>{{ story.title }}</h1>
+      </div>
+      <div class="story_card_bottom">
+        <h3 class="story_author">@{{ story.by }}</h3>
+        <div class="story_card_footer">
+          <h5>{{ story.type }}</h5>
+          <h5>{{ story.score }}</h5>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
