@@ -24,6 +24,12 @@ export class HackerStoriesComponent implements OnInit {
       // For each top story
       for (let i: number = 0; i < this.client.maxPosts && i < retPost.length; i++) {
         this.client.fetchAPost(retPost[i]).subscribe((retStory) => {
+
+          // check if no url is present, then redirect to post itself
+          if (retStory.url === undefined) {
+            retStory.url = "https://news.ycombinator.com/item?id=" + retPost[i];
+          }
+
           this.stories.push(retStory);
         });
       }
