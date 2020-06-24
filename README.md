@@ -1,5 +1,9 @@
 # HNApp
 Modern HN weapper
+Features:
+- Auto refresh timer
+- Sorting by top score
+- caching over refreshes
 
 # Details
 Made in Visual Studio 2019 Preview 2
