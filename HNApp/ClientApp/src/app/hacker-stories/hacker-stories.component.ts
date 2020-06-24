@@ -11,12 +11,14 @@ import { not } from '@angular/compiler/src/output/output_ast';
 export class HackerStoriesComponent implements OnInit {
 
   @Input() needSort: Boolean;
+  @Input() timeoutTimer: number;
 
   public stories: Post[];
   public posts: number[];
   private reloadByTimer: Boolean;
-  private TIMER = 300000; //300000 =  1000mil sec * 60 sec * 5 min
   private initialLoad: boolean;
+  private oldTimeout: number;
+  private timeout;
 
   constructor(
     public client: HnApiService) {
@@ -26,9 +28,14 @@ export class HackerStoriesComponent implements OnInit {
     this.posts = [];
     this.stories = [];
 
-    setInterval(() => {
+    this.timeout = setInterval(() => {
+      this.reloadByTimer = true;
       this.ngOnInit();
-    }, this.TIMER);
+    }, 5 * 60 * 1000);
+
+    console.log(this.timeoutTimer * 60 * 1000);
+
+    this.oldTimeout = this.timeoutTimer;
   }
 
   private SortifNecessary() {
@@ -47,7 +54,6 @@ export class HackerStoriesComponent implements OnInit {
         let tmpIndex = 0;
 
         for (let j = 0; j < this.stories.length; j++) {
-          console.log("Comparing ids: ", this.stories[j].id, " and ", this.posts[i]);
           if (this.stories[j].id === this.posts[i]) {
             tmpStory = this.stories[j];
             tmpIndex = j;
@@ -59,8 +65,6 @@ export class HackerStoriesComponent implements OnInit {
         newStoryArr.push({...tmpStory});
       }
       this.stories = newStoryArr;
-      console.log(newStoryArr);
-      console.log("new Story array length: ", this.stories.length);
     }
   }
 
@@ -72,7 +76,7 @@ export class HackerStoriesComponent implements OnInit {
       for (let i: number = 0; i < this.client.maxPosts && i < retPost.length; i++) {
 
         // Check if post is allready a known story
-        if (!(retPost[i] in this.posts)) {
+        if (this.posts.indexOf(retPost[i]) === -1) {
           // fetch the new story
           this.client.fetchAPost(retPost[i]).subscribe((retStory) => {
 
@@ -81,15 +85,14 @@ export class HackerStoriesComponent implements OnInit {
               retStory.url = "https://news.ycombinator.com/item?id=" + retPost[i];
             }
 
-            this.stories.push(retStory);
-          });
+            this.stories.unshift(retStory);
+            this.posts.unshift(retPost[i]);
 
-          this.posts.push(retPost[i]);
+            // Sort if necessary
+            this.SortifNecessary();
+          });
         }
       }
-
-      // Sort if necessary
-      this.SortifNecessary();
     });
   }
 
@@ -104,6 +107,7 @@ export class HackerStoriesComponent implements OnInit {
     else if (this.reloadByTimer) {
       console.log("RELOADING");
       this.LoadStories();
+      this.reloadByTimer = false;
     }
     else {
       // Sort if necessary
@@ -114,7 +118,22 @@ export class HackerStoriesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges){
     console.log("TRIGGER CHANGES");
-    this.ngOnInit();
+    if (this.oldTimeout !== this.timeoutTimer) {
+      // Cancel timeout
+      clearInterval(this.timeout);
+
+      // Create new timeout
+      this.timeout = setInterval(() => {
+        this.reloadByTimer = true;
+        this.ngOnInit();
+      }, this.timeoutTimer * 60 * 1000);
+      console.log("Setting new timer for: ", this.timeoutTimer);
+
+      this.oldTimeout = this.timeoutTimer;
+    }
+    else {
+      this.ngOnInit();
+    }
   }
 
 }

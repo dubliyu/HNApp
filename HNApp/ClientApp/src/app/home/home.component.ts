@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class HomeComponent {
 
   isSortByScore: Boolean;
+  timeoutTimer: number;
 
   constructor() { }
 
@@ -17,5 +18,11 @@ export class HomeComponent {
 
   public toggleSort(){
     this.isSortByScore = !this.isSortByScore;
-  } 
+  }
+
+  public changeTimer(newTimer: number) {
+    this.timeoutTimer = newTimer;
+    console.log("New time: ", this.timeoutTimer);
+
+  }
 }

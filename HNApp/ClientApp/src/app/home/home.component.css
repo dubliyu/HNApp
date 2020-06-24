@@ -8,6 +8,21 @@
 .body_ctn{
     margin: 10px;
 }
-.stories_ctn {
+.sorting_ctn {
+  color: #8a3c08;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
+.refresh_ctn{
+    margin-top: 5px;
+}
+
+#timer_in{
+    width: 50px;
+    border-radius: 3px;
+    color: Highlight;
+    border: 1px solid grey;
 }

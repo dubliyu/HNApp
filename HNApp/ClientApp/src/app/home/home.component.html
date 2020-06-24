@@ -2,11 +2,16 @@
   <h1>Hacker News</h1>
   <h3>Carlos Leon</h3>
   <div class="sorting_ctn">
-    Sort by score <input (click)="toggleSort()" type="checkbox">
+    <div>
+      Sort by top score <input (click)="toggleSort()" type="checkbox">
+    </div>
+    <div  class="refresh_ctn">
+      Refresh every <input #timer_in id="timer_in" min="1"  (change)="changeTimer(timer_in.value)" type="number" placeholder="5" value="5" /> (minutes)
+    </div>
   </div>
 </div>
 <div class="body_ctn">
   <div class="stories_ctn">
-    <app-hacker-stories [needSort]="isSortByScore"></app-hacker-stories>
+    <app-hacker-stories [timeoutTimer]="timeoutTimer" [needSort]="isSortByScore"></app-hacker-stories>
   </div>
 </div>
