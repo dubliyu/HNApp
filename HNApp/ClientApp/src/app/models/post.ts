@@ -1,11 +1,13 @@
 export class Post {
+  id: number;
   type: string;
   by: string;
   title: string;
   url: string;
   score: number;
 
-  constructor(type, by, title, url, score) {
+  constructor(id, type, by, title, url, score) {
+    this.id = id;
     this.type = type;
     this.by = by;
     this.title = title;

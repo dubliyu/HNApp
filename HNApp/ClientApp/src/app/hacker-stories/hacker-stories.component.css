@@ -56,3 +56,36 @@
   color: lightgray;
   font-size: 0.5em;
 }
+
+@media only screen and (max-width: 1300px) {
+  .story_author {
+    font-size: 2em;
+  }
+
+  .story_title {
+    font-size: 1.25em;
+  }
+
+  .story_card_bottom{
+      flex-direction: column;
+  }
+
+  .story_score, .story_author {
+    font-size: 1.6em;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .story_author {
+    font-size: 1.75em;
+  }
+
+  .story_title {
+    font-size: 0.85em;
+  }
+
+  .story_score, .story_author {
+    font-size: 1.3em;
+  }
+}
+

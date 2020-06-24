@@ -1,9 +1,12 @@
 <div class="header_ctn">
   <h1>Hacker News</h1>
-  <h3>Carlos leon</h3>
+  <h3>Carlos Leon</h3>
+  <div class="sorting_ctn">
+    Sort by score <input (click)="toggleSort()" type="checkbox">
+  </div>
 </div>
 <div class="body_ctn">
   <div class="stories_ctn">
-    <app-hacker-stories></app-hacker-stories>
+    <app-hacker-stories [needSort]="isSortByScore"></app-hacker-stories>
   </div>
 </div>

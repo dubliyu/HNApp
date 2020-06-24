@@ -1,4 +1,5 @@
 import { AppPage } from './app.po';
+import { by } from 'protractor';
 
 describe('App', () => {
   let page: AppPage;
@@ -7,8 +8,22 @@ describe('App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display title and subheading', () => {
     page.navigateTo();
-    expect(page.getMainHeading()).toEqual('Hello, world!');
+    expect(page.getMainHeading()).toEqual('Hacker News');
+    expect(page.getSubHeading()).toEqual('Carlos Leon');
+  });
+
+  it('contains 30 story cards after 5 seconds', (done) => {
+    page.navigateTo();
+
+    setTimeout(() => {
+      let stories = page.getStoryCards();
+
+      expect(stories.count()).toEqual(30);
+
+      done();
+    }, 5000);
+
   });
 });
