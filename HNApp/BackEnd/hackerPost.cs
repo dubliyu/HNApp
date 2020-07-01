@@ -7,8 +7,12 @@ namespace HNApp.BackEnd
 {
     public class HackerPost
     {
+        public int id; 
         public int score;
 
+        public string by;
+        public string ur;
+        public string type;
         public string title;
     }
 }
