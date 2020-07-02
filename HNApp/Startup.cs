@@ -70,6 +70,9 @@ namespace HNApp
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            // Start HN Api
+            BackEnd.HackerPostContainer.init();
         }
     }
 }
