@@ -51,9 +51,9 @@ namespace HNApp
     {
         // GET: api/<hackerPost>
         [HttpGet]
-        public async Task<IEnumerable<HackerPost>> GetAsync([FromQuery] int page, [FromQuery] string sortby){
+        public IEnumerable<HackerPost> Get([FromQuery] int page, [FromQuery] string sortby){
             // Get from HackerPostContainer
-            HackerPost[] posts = await HackerPostContainer.getHackerNewsPageAsync(page);
+            HackerPost[] posts = HackerPostContainer.getHackerNewsPage(page);
 
             // Sort if 
             if(sortby == "score")

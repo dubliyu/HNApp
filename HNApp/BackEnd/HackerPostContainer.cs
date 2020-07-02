@@ -42,10 +42,14 @@ namespace HNApp.BackEnd
         public static int CacheBound = 500;
         public static int PageSize = 25;
 
-        public static async Task<HackerPost[]> getHackerNewsPageAsync(int page) {
-            await checkFetchTimer();
+        public static async void init()
+        {
+            await fetchAllPostsAsync();
+            setFetchTimer();
+        }
 
-            // Get 25 stories for this page from the cache
+        public static HackerPost[] getHackerNewsPage(int page) {
+
             checkCacheForPage(page);
             HackerPost[] ret = new HackerPost[PageSize];
             int j = 0;
@@ -77,15 +81,8 @@ namespace HNApp.BackEnd
         }
 
 
-        private static async Task checkFetchTimer()
+        public static void checkFetchTimer()
         {
-            // Check if timer has never been started
-            if (!TimerIsRunning)
-            {
-                await fetchAllPostsAsync();
-                TimerIsRunning = true;
-                setFetchTimer();
-            }
             // Check if a timer refresh is waranted
             if (HardRefresh)
             {
