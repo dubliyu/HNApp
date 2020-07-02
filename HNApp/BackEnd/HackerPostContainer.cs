@@ -39,17 +39,19 @@ namespace HNApp.BackEnd
         public static bool HardRefresh = false;
         public static int TimerDuration = 5000;
         public static HNpostCacheItem[] Cache = new HNpostCacheItem[500]; // up to 500
+        public static int CacheBound = 500;
+        public static int PageSize = 25;
 
         public static async Task<HackerPost[]> getHackerNewsPageAsync(int page) {
             await checkFetchTimer();
 
             // Get 25 stories for this page from the cache
             checkCacheForPage(page);
-            HackerPost[] ret = new HackerPost[25];
+            HackerPost[] ret = new HackerPost[PageSize];
             int j = 0;
-            for (int i = page * 25; i < Cache.Length && j < 25; i++, j++)
+            for (int i = page * PageSize; i < CacheBound && j < PageSize; i++, j++)
             {
-                ret[j++] = Cache[i].post;
+                ret[j] = Cache[i].post;
             }
 
             return ret;
@@ -60,7 +62,7 @@ namespace HNApp.BackEnd
             // This will be faster then getting them individually
 
             List<Task> fetchStoryList = new List<Task>();
-            for(int i = page* 25; i <Cache.Length; i++)
+            for(int i = page * PageSize; i < CacheBound; i++)
             {
                 if(Cache[i] is null)
                 {
@@ -101,10 +103,9 @@ namespace HNApp.BackEnd
             timer.Enabled = true;
         }
 
-        private static void fetchOnTimer(object sender, ElapsedEventArgs e)
+        private static async void fetchOnTimer(object sender, ElapsedEventArgs e)
         {
-            // We dont need to wait for this to finish
-            fetchAllPostsAsync();
+            await fetchAllPostsAsync();
         }
 
         private static async Task fetchAllPostsAsync()
@@ -114,8 +115,9 @@ namespace HNApp.BackEnd
             {
                 string responseBody = await client.GetStringAsync(Top500Url);
                 int[] top500posts = JsonSerializer.Deserialize<int[]>(responseBody);
+                CacheBound = top500posts.Length;
 
-                for(int i=0; i < top500posts.Length; i++)
+                for (int i=0; i < top500posts.Length; i++)
                 {
                     if(Cache[i] == null)
                     {
