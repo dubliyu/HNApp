@@ -34,10 +34,10 @@ namespace HNApp.BackEnd
         public static int CacheBound = 500;
         public static int PageSize = 18;
 
-        public static async Task RefreshCache()
+        public static void RefreshCache()
         {
             Cache.Clear();
-            await FetchAllPostsAsync();
+            Task.WaitAny(FetchAllPostsAsync());
         }
 
         public static HackerPost[] GetHackerNewsPage(int page) {
