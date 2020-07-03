@@ -1,17 +1,26 @@
 <div class="header_ctn">
   <h1>Hacker News</h1>
   <h3>Carlos Leon</h3>
-  <div class="sorting_ctn">
+  <div class="controls_ctn">
     <div>
-      Sort by top score <input (click)="toggleSort()" type="checkbox">
+      <button (click)="refresh()">Refresh 🔃</button>
     </div>
-    <div  class="refresh_ctn">
-      Refresh every <input #timer_in id="timer_in" min="1"  (change)="changeTimer(timer_in.value)" type="number" placeholder="5" value="5" /> (minutes)
+    <div>
+      <label for="sorting_method">Sorting Method:</label>
+      <select name="sorting_method" id="sorting_method" (change)="change_sort($event.target.value)">
+        <option value="score" selected>Top Score</option>
+        <option value="alpha">Alphabetical</option>
+        <option value="natural">HN Order</option>
+      </select>
+    </div>
+    <div class="paging_controls">
+      <a href="#" (click)="prev_page()" class="page_control">⬅ Previous Page</a>
+      <a href="#" (click)="next_page()" class="page_control">Next Page ➡</a>
     </div>
   </div>
 </div>
 <div class="body_ctn">
   <div class="stories_ctn">
-    <app-hacker-stories [timeoutTimer]="timeoutTimer" [needSort]="isSortByScore"></app-hacker-stories>
+    <app-hacker-stories [PerformRefresh]="PerformRefresh" [SortBy]="SortBy" [PageNumber]="PageNumber"></app-hacker-stories>
   </div>
 </div>

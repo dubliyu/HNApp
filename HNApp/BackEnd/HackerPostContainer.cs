@@ -29,7 +29,6 @@ namespace HNApp.BackEnd
     {
         static readonly HttpClient client = new HttpClient();
 
-        private static bool TimerIsRunning = false;
         private static System.Timers.Timer timer;
 
         const string StoryUrl = "https://news.ycombinator.com/item?id=";
@@ -40,7 +39,7 @@ namespace HNApp.BackEnd
         public static int TimerDuration = 5000;
         public static HNpostCacheItem[] Cache = new HNpostCacheItem[500]; // up to 500
         public static int CacheBound = 500;
-        public static int PageSize = 25;
+        public static int PageSize = 18;
 
         public static async void init()
         {

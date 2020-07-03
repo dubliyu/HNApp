@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Threading.Tasks;
 using HNApp.BackEnd;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +16,11 @@ namespace HNApp
 
             if(hx.score < hy.score)
             {
-                return -1;
+                return 1;
             }
             else if(hx.score > hy.score)
             {
-                return 1;
+                return -1;
             }
             else
             {
@@ -73,5 +70,26 @@ namespace HNApp
             // Return
             return posts;
         }
+
+        // GET: api/<hackerPost>/MaxStories
+        [HttpGet("MaxStories")]
+        public int GetMaxStories()
+        {
+            // Get the Cache size from HackerPostContainer
+            int cacheSize = HackerPostContainer.CacheBound;
+            return cacheSize;
+        }
+
+        // GET: api/<hackerPost>/MaxStories
+        [HttpGet("TriggerRefresh")]
+        public bool GetTriggerRefresh()
+        {
+            // Trigger a refresh of the HackerPostContainer 
+            HackerPostContainer.HardRefresh = true;
+            HackerPostContainer.checkFetchTimer();
+            return true;
+        }
     }
+
+
 }

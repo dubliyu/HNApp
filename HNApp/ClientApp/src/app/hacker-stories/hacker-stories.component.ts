@@ -10,23 +10,32 @@ import { Post } from '../models/post';
 export class HackerStoriesComponent implements OnInit {
 
   // Front End 
-  @Input() needSort: Boolean;
-  @Input() timeoutTimer: number;
+  @Input() PerformRefresh: Boolean;
+  @Input() SortBy: string;
+  @Input() PageNumber: number;
+
+  // Post for ngFor
   public stories: Post[];
 
-  private sortby: string = 'alpha';
-  private page: number = 2;
+  // Private vars
+  private base_url: string;
+  private http: HttpClient;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    let url = baseUrl + `api/HackerPostApi?page=${this.page}&sortby=${this.sortby}`
-    http.get<Post[]>(baseUrl + 'api/HackerPostApi').subscribe(result => {
-      console.log("Succes: ", result);
+    this.base_url = baseUrl;
+    this.http = http;
+  }
+
+  ngOnInit() {
+    let url = this.base_url + `api/HackerPostApi?page=${this.PageNumber}&sortby=${this.SortBy}`
+    this.http.get<Post[]>(url).subscribe(result => {
+      console.log("Fetched: ", result);
       this.stories = result;
     }, error => console.error("Failed to fetch: ", error));
   }
 
-  ngOnInit(){ }
-
-  ngOnChanges(changes: SimpleChanges){ }
+  ngOnChanges(changes: SimpleChanges) {
+    this.ngOnInit();
+  }
 
 }
