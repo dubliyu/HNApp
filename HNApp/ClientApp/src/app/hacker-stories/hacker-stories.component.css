@@ -13,7 +13,7 @@
   transition: 0.3s;
   min-width: 15vw;
   max-width: 15vw;
-  min-height: 25vh;
+  min-height: 20vh;
   max-height: 40vh;
   padding: 2px 8px;
   margin: 10px 10px 15px 10px;
@@ -43,7 +43,10 @@
 }
 .story_author {
   color: #292626;
-  font-size: 2.25em;
+  font-size: 2em;
+}
+.story_type {
+  font-size: 2em;
 }
 
 .story_title{
@@ -52,16 +55,13 @@
 
 .story_card_bottom {
   display: flex;
+  align-items: flex-end;
   justify-content: space-between;
   color: lightgray;
   font-size: 0.5em;
 }
 
 @media only screen and (max-width: 1300px) {
-  .story_author {
-    font-size: 2em;
-  }
-
   .story_title {
     font-size: 1.25em;
   }
@@ -70,7 +70,7 @@
       flex-direction: column;
   }
 
-  .story_score, .story_author {
+  .story_type, .story_author {
     font-size: 1.6em;
   }
 }
@@ -84,7 +84,7 @@
     font-size: 0.85em;
   }
 
-  .story_score, .story_author {
+  .story_type, .story_author {
     font-size: 1.3em;
   }
 }

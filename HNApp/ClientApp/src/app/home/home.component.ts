@@ -25,7 +25,7 @@ export class HomeComponent {
     this.http = http;
     this.http.get<number>(url).subscribe(result => {
       console.log("Number Of Stories: ", result);
-      this.LastPageNumber = Math.ceil(result / this.PageSize);
+      this.LastPageNumber = Math.floor(result / this.PageSize);
     }, error => console.error("Failed to get Max Stories: ", error));
   }
 
