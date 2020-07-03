@@ -1,9 +1,5 @@
 # HNApp
 Modern HN weapper
-Features:
-- Auto refresh timer
-- Sorting by top score
-- caching over refreshes
 
 # Deploy
 Currently deployed to https://hnapp20200703012223.azurewebsites.net/
