@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Transactions;
 
 namespace HNApp.BackEnd
 {
@@ -29,35 +25,31 @@ namespace HNApp.BackEnd
     {
         static readonly HttpClient client = new HttpClient();
 
-        private static System.Timers.Timer timer;
-
         const string StoryUrl = "https://news.ycombinator.com/item?id=";
         const string PostUrl = "https://hacker-news.firebaseio.com/v0/item/";
         const string Top500Url = "https://hacker-news.firebaseio.com/v0/topstories.json";
 
         public static bool HardRefresh = false;
-        public static int TimerDuration = 5000;
-        public static HNpostCacheItem[] Cache = new HNpostCacheItem[500]; // up to 500
+        public static List<HNpostCacheItem> Cache = new List<HNpostCacheItem>(); 
         public static int CacheBound = 500;
         public static int PageSize = 18;
 
-        public static async void Init()
+        public static async Task RefreshCache()
         {
+            Cache.Clear();
             await FetchAllPostsAsync();
-            //setFetchTimer();
         }
 
         public static HackerPost[] GetHackerNewsPage(int page) {
 
             CheckCacheForPage(page);
-            HackerPost[] ret = new HackerPost[PageSize];
+            List<HackerPost> ret = new List<HackerPost>();
             int j = 0;
             for (int i = page * PageSize; i < CacheBound && j < PageSize; i++, j++)
             {
-                ret[j] = Cache[i].post;
+                ret.Add(Cache[i].post);
             }
-
-            return ret;
+            return ret.ToArray();
         }
 
         private static void CheckCacheForPage(int page){
@@ -79,34 +71,8 @@ namespace HNApp.BackEnd
             Task.WaitAll(fetchStoryList.ToArray());
         }
 
-
-        public static void CheckFetchTimer()
-        {
-            // Check if a timer refresh is waranted
-            if (HardRefresh)
-            {
-                timer.Dispose();
-                SetFetchTimer();
-                HardRefresh = false;
-            }
-        }
-
-        private static void SetFetchTimer()
-        {
-            timer = new System.Timers.Timer(TimerDuration);
-            timer.Elapsed += FetchOnTimer;
-            timer.AutoReset = true;
-            timer.Enabled = true;
-        }
-
-        private static async void FetchOnTimer(object sender, ElapsedEventArgs e)
-        {
-            await FetchAllPostsAsync();
-        }
-
         private static async Task FetchAllPostsAsync()
         {
-            // Get array of 500 int posts;
             try
             {
                 string responseBody = await client.GetStringAsync(Top500Url);
@@ -115,27 +81,7 @@ namespace HNApp.BackEnd
 
                 for (int i=0; i < top500posts.Length; i++)
                 {
-                    if(Cache[i] == null)
-                    {
-                        Cache[i] = new HNpostCacheItem(top500posts[i]);
-                    }
-                    else
-                    {
-                        // Check if at this rank is the same story as before
-                        if (Cache[i].id != top500posts[i])
-                        {
-                            if (Cache[i].hasStory)
-                            {
-                                TryToSaveStory(i, top500posts);
-                            }
-                            else
-                            {
-                                // if we never fecthed a story for this post
-                                // just overwrite it
-                                Cache[i].id = top500posts[i];
-                            }
-                        }
-                    }
+                    Cache.Add(new HNpostCacheItem(top500posts[i]));
                 }
             }
             catch (Exception e)
@@ -145,31 +91,6 @@ namespace HNApp.BackEnd
             }
         }
 
-        private static void TryToSaveStory(int index, int[] top500)
-        {
-            // At index there is a post with a story that was fetched
-            // That story has been moved up or down, or off the list
-            // See if old exists inside top500
-            for(int i=0; i < top500.Length; i++)
-            {
-                if(top500[i] == Cache[index].id)
-                {
-                    // The old story is still in the top 500
-                    // Before we replace teh post at position i
-                    // check if position i had a story, if so this one has
-                    // been moved as well, try to save it.
-                    if (Cache[i].hasStory)
-                    {
-                        TryToSaveStory(i, top500);
-                    }
-                    
-                    // Replace
-                    Cache[i].id = Cache[index].id;
-                    Cache[i].hasStory = Cache[index].hasStory;
-                    Cache[i].post = Cache[index].post;
-                }
-            }
-        }
 
         private static async Task GetStory(int index)
         {
@@ -185,6 +106,15 @@ namespace HNApp.BackEnd
                 if(post.url is null)
                 {
                     post.url = StoryUrl + post.id;
+                }
+
+                if(post.title.Contains("Ask HN:"))
+                {
+                    post.type = "Ask HN";
+                }
+                else if (post.title.Contains("Show HN:"))
+                {
+                    post.type = "Show HN";
                 }
             }
             catch (Exception e)

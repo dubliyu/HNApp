@@ -82,12 +82,10 @@ namespace HNApp
 
         // GET: api/<hackerPost>/MaxStories
         [HttpGet("TriggerRefresh")]
-        public bool GetTriggerRefresh()
+        public async void GetTriggerRefresh()
         {
             // Trigger a refresh of the HackerPostContainer 
-            HackerPostContainer.HardRefresh = true;
-            //HackerPostContainer.checkFetchTimer();
-            return true;
+            await HackerPostContainer.RefreshCache();
         }
     }
 
