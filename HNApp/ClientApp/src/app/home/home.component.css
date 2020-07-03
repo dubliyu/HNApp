@@ -8,21 +8,71 @@
 .body_ctn{
     margin: 10px;
 }
-.sorting_ctn {
-  color: #8a3c08;
+.controls_ctn {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.refresh_ctn{
-    margin-top: 5px;
+.div_space{
+    margin-bottom: 10px;
 }
 
-#timer_in{
-    width: 50px;
-    border-radius: 3px;
-    color: Highlight;
-    border: 1px solid grey;
+#refresh_btn {
+  color: white;
+  border-radius: 3px;
+  background: rgb(0, 123, 255);
+  border: none;
+  padding: 5px 10px;
+}
+
+  #refresh_btn:hover {
+    background: #0069d9;
+  }
+  #refresh_btn:active {
+    background: #0069d9;
+    border: 1px solid blue;
+
+  }
+
+#sorting_method {
+  color: white;
+  border-radius: 3px;
+  background: rgb(0, 123, 255);
+  border: none;
+  padding: 5px 10px;
+}
+  #sorting_method:active {
+    background: #0069d9;
+  }
+
+
+.page_control {
+  width: 250px;
+  color: white;
+  border-radius: 3px;
+  background: rgb(0, 123, 255);
+  border: none;
+  padding: 5px 10px;
+}
+
+.paging_controls{
+    display: flex;
+    justify-content: space-between;
+    width: 350px;
+}
+
+.page_counter_ctn {
+  background: #ababab;
+  margin: 0px 10px;
+  border-radius: 4px;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#current_page {
+    color: white;
+    font-size: 1.5em;
 }

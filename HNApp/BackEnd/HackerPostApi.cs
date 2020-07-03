@@ -50,7 +50,7 @@ namespace HNApp
         [HttpGet]
         public IEnumerable<HackerPost> Get([FromQuery] int page, [FromQuery] string sortby){
             // Get from HackerPostContainer
-            HackerPost[] posts = HackerPostContainer.getHackerNewsPage(page);
+            HackerPost[] posts = HackerPostContainer.GetHackerNewsPage(page);
 
             // Sort if 
             if(sortby == "score")
@@ -86,7 +86,7 @@ namespace HNApp
         {
             // Trigger a refresh of the HackerPostContainer 
             HackerPostContainer.HardRefresh = true;
-            HackerPostContainer.checkFetchTimer();
+            //HackerPostContainer.checkFetchTimer();
             return true;
         }
     }

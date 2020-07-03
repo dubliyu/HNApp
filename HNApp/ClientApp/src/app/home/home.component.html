@@ -2,19 +2,22 @@
   <h1>Hacker News</h1>
   <h3>Carlos Leon</h3>
   <div class="controls_ctn">
-    <div>
-      <button (click)="refresh()">Refresh 🔃</button>
+    <div class="div_space">
+      <button id="refresh_btn" (click)="refresh()">Refresh 🔃</button>
     </div>
-    <div>
-      <label for="sorting_method">Sorting Method:</label>
+    <div  class="div_space">
       <select name="sorting_method" id="sorting_method" (change)="change_sort($event.target.value)">
-        <option value="score" selected>Top Score</option>
-        <option value="alpha">Alphabetical</option>
-        <option value="natural">HN Order</option>
+        Sort By:
+        <option value="score" selected>Sort By Top Score</option>
+        <option value="alpha">Sort Alphabetically</option>
+        <option value="natural">Sort By HN Order</option>
       </select>
     </div>
-    <div class="paging_controls">
+    <div class=" div_space paging_controls">
       <a href="#" (click)="prev_page()" class="page_control">⬅ Previous Page</a>
+      <div class="page_counter_ctn">
+        <span id="current_page">{{PageNumber + 1}}</span>
+      </div>
       <a href="#" (click)="next_page()" class="page_control">Next Page ➡</a>
     </div>
   </div>

@@ -7,6 +7,7 @@ namespace HNApp.BackEnd
 {
     public class HackerPost
     {
+#pragma warning disable IDE1006 // Naming Styles
         public int id { get; set; }
         public int score { get; set; }
 
@@ -14,5 +15,7 @@ namespace HNApp.BackEnd
         public string url { get; set; }
         public string type { get; set; }
         public string title { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
+
     }
 }

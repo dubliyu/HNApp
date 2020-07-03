@@ -41,15 +41,15 @@ namespace HNApp.BackEnd
         public static int CacheBound = 500;
         public static int PageSize = 18;
 
-        public static async void init()
+        public static async void Init()
         {
-            await fetchAllPostsAsync();
-            setFetchTimer();
+            await FetchAllPostsAsync();
+            //setFetchTimer();
         }
 
-        public static HackerPost[] getHackerNewsPage(int page) {
+        public static HackerPost[] GetHackerNewsPage(int page) {
 
-            checkCacheForPage(page);
+            CheckCacheForPage(page);
             HackerPost[] ret = new HackerPost[PageSize];
             int j = 0;
             for (int i = page * PageSize; i < CacheBound && j < PageSize; i++, j++)
@@ -60,7 +60,7 @@ namespace HNApp.BackEnd
             return ret;
         }
 
-        private static void checkCacheForPage(int page){
+        private static void CheckCacheForPage(int page){
             // We want to get all the missing stories at once
             // This will be faster then getting them individually
 
@@ -73,38 +73,38 @@ namespace HNApp.BackEnd
                 }
                 if (!Cache[i].hasStory)
                 {
-                    fetchStoryList.Add(getStory(i));
+                    fetchStoryList.Add(GetStory(i));
                 }
             }
             Task.WaitAll(fetchStoryList.ToArray());
         }
 
 
-        public static void checkFetchTimer()
+        public static void CheckFetchTimer()
         {
             // Check if a timer refresh is waranted
             if (HardRefresh)
             {
                 timer.Dispose();
-                setFetchTimer();
+                SetFetchTimer();
                 HardRefresh = false;
             }
         }
 
-        private static void setFetchTimer()
+        private static void SetFetchTimer()
         {
             timer = new System.Timers.Timer(TimerDuration);
-            timer.Elapsed += fetchOnTimer;
+            timer.Elapsed += FetchOnTimer;
             timer.AutoReset = true;
             timer.Enabled = true;
         }
 
-        private static async void fetchOnTimer(object sender, ElapsedEventArgs e)
+        private static async void FetchOnTimer(object sender, ElapsedEventArgs e)
         {
-            await fetchAllPostsAsync();
+            await FetchAllPostsAsync();
         }
 
-        private static async Task fetchAllPostsAsync()
+        private static async Task FetchAllPostsAsync()
         {
             // Get array of 500 int posts;
             try
@@ -126,7 +126,7 @@ namespace HNApp.BackEnd
                         {
                             if (Cache[i].hasStory)
                             {
-                                tryToSaveStory(i, top500posts);
+                                TryToSaveStory(i, top500posts);
                             }
                             else
                             {
@@ -140,11 +140,12 @@ namespace HNApp.BackEnd
             }
             catch (Exception e)
             {
+                Console.WriteLine("Error in fetchAllPostsAsync");
                 Console.WriteLine(e.StackTrace);
             }
         }
 
-        private static void tryToSaveStory(int index, int[] top500)
+        private static void TryToSaveStory(int index, int[] top500)
         {
             // At index there is a post with a story that was fetched
             // That story has been moved up or down, or off the list
@@ -159,7 +160,7 @@ namespace HNApp.BackEnd
                     // been moved as well, try to save it.
                     if (Cache[i].hasStory)
                     {
-                        tryToSaveStory(i, top500);
+                        TryToSaveStory(i, top500);
                     }
                     
                     // Replace
@@ -170,7 +171,7 @@ namespace HNApp.BackEnd
             }
         }
 
-        private static async Task getStory(int index)
+        private static async Task GetStory(int index)
         {
             try
             {
@@ -188,6 +189,7 @@ namespace HNApp.BackEnd
             }
             catch (Exception e)
             {
+                Console.WriteLine("Error in getStory");
                 Console.WriteLine(e.StackTrace);
             }
         }

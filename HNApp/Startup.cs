@@ -72,7 +72,7 @@ namespace HNApp
             });
 
             // Start HN Api
-            BackEnd.HackerPostContainer.init();
+            BackEnd.HackerPostContainer.Init();
         }
     }
 }
